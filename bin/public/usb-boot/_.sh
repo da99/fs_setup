@@ -5,6 +5,11 @@
 # From: https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux
 usb-boot () {
   # sudo fdisk -l
+  local +x ISO="$1"; shift
+  if [[ ! -e "$FILE" ]]; then
+    echo "!!! Not a file: $FILE"
+  fi
+
   local +x IFS=$'\n'
   local +x SIZE_NAME="$(for LINE in $(lsblk -l | tr -s ' '); do
     local +x MOUNT_POINT="$(echo "$LINE" | cut -d' ' -f6)"
@@ -19,13 +24,36 @@ usb-boot () {
     exit 1
   fi
 
+  local +x SIZE="$(echo "$SIZE_NAME" | cut -d' ' -f1)"
   local +x NAME="$(echo "$SIZE_NAME" | cut -d' ' -f2)"
-  echo -n "Is this corrent? (y/N): $SIZE_NAME ($(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f10)) : "
+  echo "Found:"
+  echo "  SIZE:  $SIZE"
+  echo "  NAME:  $NAME"
+  echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f9)"
 
+  echo "Is this corrent? (y/N):"
   read ans
+  echo -n "Please wait."; sleep 1
+  echo -n '.'; sleep 1; echo -n '.'; sleep 1
+  echo -n '.'; sleep 1; echo -n '.'; sleep 1
+  echo '.'; sleep 1
+
   case "$ans" in
     y|Y|YES|yes)
-      echo "== done: $NAME"
+      set "-x"
+      sudo parted /dev/$NAME mklabel gpt
+      sudo parted -a opt /dev/$NAME mkpart primary ext4 0% 100%
+      set +x
+      echo "=== Results:"
+      lsblk | grep "$NAME"
+
+      echo "=== Creating filesystem on partion ${NAME}1 on disk $NAME:"
+      sudo mkfs.ext4 -L usbboot /dev/${NAME}1
+      echo "=== Results:"
+      lsblk --fs | grep "$NAME"
+
+      echo "=== Writing file to disk: $FILE"
+      sudo dd bs=4M if="$FILE" of=/dev/$NAME status=progress && sync
       ;;
     *)
       echo "Exiting..."
