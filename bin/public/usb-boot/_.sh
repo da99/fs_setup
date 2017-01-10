@@ -6,8 +6,8 @@
 usb-boot () {
   # sudo fdisk -l
   local +x ISO="$1"; shift
-  if [[ ! -e "$FILE" ]]; then
-    echo "!!! Not a file: $FILE"
+  if [[ ! -e "$ISO" ]]; then
+    echo "!!! Not a file: $ISO"
   fi
 
   local +x IFS=$'\n'
@@ -29,17 +29,17 @@ usb-boot () {
   echo "Found:"
   echo "  SIZE:  $SIZE"
   echo "  NAME:  $NAME"
-  echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f9)"
+  echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f9 | tr '\n' ' ')"
 
-  echo "Is this corrent? (y/N):"
+  echo -n "Is this corrent? (y/N): "
   read ans
-  echo -n "Please wait."; sleep 1
-  echo -n '.'; sleep 1; echo -n '.'; sleep 1
-  echo -n '.'; sleep 1; echo -n '.'; sleep 1
-  echo '.'; sleep 1
 
   case "$ans" in
     y|Y|YES|yes)
+      echo -n "Please wait."; sleep 1
+      echo -n '.'; sleep 1; echo -n '.'; sleep 1
+      echo -n '.'; sleep 1; echo -n '.'; sleep 1
+      echo '.'; sleep 1
       set "-x"
       sudo parted /dev/$NAME mklabel gpt
       sudo parted -a opt /dev/$NAME mkpart primary ext4 0% 100%
@@ -52,8 +52,10 @@ usb-boot () {
       echo "=== Results:"
       lsblk --fs | grep "$NAME"
 
-      echo "=== Writing file to disk: $FILE"
-      sudo dd bs=4M if="$FILE" of=/dev/$NAME status=progress && sync
+      echo "=== Writing file to disk: $ISO"
+      sudo dd bs=4M if="$ISO" of=/dev/$NAME status=progress && sync
+      echo "=== Results:"
+      sudo fdisk -l /dev/$NAME
       ;;
     *)
       echo "Exiting..."
