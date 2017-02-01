@@ -6,7 +6,7 @@ source "$THIS_DIR/bin/public/choose/_.sh"
 
 # === {{CMD}}  some/dir/
 # === {{CMD}}  some/dir/file.txt
-# === {{CMD}}  --choose [last|file|dir]
+# === {{CMD}}  --choose [last|file|dir|..]
 
 open () {
   case "$@" in
