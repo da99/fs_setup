@@ -4,8 +4,6 @@
 THE_ARGS="$@"
 THIS_DIR="$(dirname "$(dirname "$0")")"
 
-PATH="$PATH:$THIS_DIR/../mksh_setup/bin"
-
 if [[ -z "$@" ]]; then
   action="watch"
 else
@@ -15,12 +13,20 @@ fi
 
 set -u -e -o pipefail
 
+EDITOR=${EDITOR:-nvim}
+CACHE="$THIS_DIR/progs/cache"
+FILE_HISTORY="$CACHE"/files.txt
+
 case $action in
   help|--help|-h)
+    PATH="$PATH:$THIS_DIR/../mksh_setup/bin"
     mksh_setup print-help $0 "$@"
     ;;
 
   *)
+
+    mkdir -p "$CACHE"
+    touch "$FILE_HISTORY"
 
     FUNC_FILE="$THIS_DIR/bin/public/${action}/_.sh"
 

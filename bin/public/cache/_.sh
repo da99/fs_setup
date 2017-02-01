@@ -1,0 +1,65 @@
+
+# === {{CMD}}  compact
+# === {{CMD}}  --force compact
+# === {{CMD}}  insert  "..file|dir..."
+# === {{CMD}}  last
+# === {{CMD}}  list
+# === {{CMD}}  list-files
+# === {{CMD}}  list-dirs
+# === {{CMD}}  edit
+cache () {
+  local +x COMMAND="$1"; shift
+  local +x MAX="100"
+
+  case "$COMMAND" in
+
+    edit)
+      $EDITOR "${FILE_HISTORY}"
+      ;;
+
+    last)
+      cache list | tail -n1
+      ;;
+
+    list)
+      awk '!seen[$0]++' "$FILE_HISTORY"
+      ;;
+
+    list-files)
+      awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "[^/]$"
+      ;;
+
+    list-dirs)
+      awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "/$"
+      ;;
+
+    insert)
+      cache compact
+      echo "$1" >> "$FILE_HISTORY"
+      ;;
+
+    compact)
+      if [[ $(cat "$FILE_HISTORY" | wc -l) -gt $MAX ]]; then
+        cache --force compact
+      fi
+      ;;
+
+    --force)
+      case "$1" in
+        compact)
+          echo "$(awk '!seen[$0]++' "$FILE_HISTORY")" > "$FILE_HISTORY"
+          ;;
+        *)
+          echo "!!! Invalid command: --force $@" >&2
+          exit 1
+          ;;
+      esac
+      ;;
+
+    *)
+      echo "!!! Invalid command: $COMMAND $@" >&2
+      exit 1
+      ;;
+
+  esac # === case "$COMMAND"
+} # === end function
