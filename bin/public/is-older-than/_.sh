@@ -10,7 +10,9 @@ is-older-than () {
     return 0
   fi
 
-  local +x AGE="$(modified-age "$FILENAME")"
+  local +x NOW="$(date +"%s")"
+  local +x THEN="$(stat -c %Y "$FILENAME")"
+  local +x AGE="$(( NOW - THEN ))"
 
   [[ "$AGE" -gt "$SECONDS" ]]
 } # === end function
