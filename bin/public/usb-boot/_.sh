@@ -24,12 +24,33 @@ usb-boot () {
     exit 1
   fi
 
+  mount_points () {
+    lsblk  -l | grep -P '^'$1'\d+.+part\s+.+' | tr -s ' ' | cut -d' ' -f7- || :
+  }
   local +x SIZE="$(echo "$SIZE_NAME" | cut -d' ' -f1)"
   local +x NAME="$(echo "$SIZE_NAME" | cut -d' ' -f2)"
+  local +x MOUNT_POINT="$(mount_points "$NAME")"
   echo "Found:"
+  echo "  MOUNT POINT:  $MOUNT_POINT"
   echo "  SIZE:  $SIZE"
   echo "  NAME:  $NAME"
   echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f9 | tr '\n' ' ')"
+
+  if [[ ! -z "$MOUNT_POINT" ]]; then
+    local +x IFS=$'\n'
+    for LINE in $(mount_points "$NAME"); do
+    echo -n "Is this the corrent partition?: $LINE (y/N): "
+    read ans
+    case "$ans" in
+      y|Y|YES|yes)
+        umount "$LINE"
+        ;;
+      *)
+        exit 2
+        ;;
+    esac
+    done
+  fi
 
   echo -n "Is this corrent? (y/N): "
   read ans
@@ -47,14 +68,14 @@ usb-boot () {
       echo "=== Results:"
       lsblk | grep "$NAME"
 
-      echo "=== Creating filesystem on partion ${NAME}1 on disk $NAME:"
+      echo "=== Creating filesystem on partition ${NAME}1 on disk $NAME:"
       sudo mkfs.ext4 -L usbboot /dev/${NAME}1
-      echo "=== Results:"
+      echo "=== Results of creating filesystem on partition:"
       lsblk --fs | grep "$NAME"
 
       echo "=== Writing file to disk: $ISO"
       sudo dd bs=4M if="$ISO" of=/dev/$NAME status=progress && sync
-      echo "=== Results:"
+      echo "=== Results of writing file to disk:"
       sudo fdisk -l /dev/$NAME
       ;;
     *)
