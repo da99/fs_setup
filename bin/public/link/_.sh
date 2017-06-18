@@ -9,6 +9,7 @@ link () {
   PATH="$PATH:$THIS_DIR/../sh_color/bin"
   local +x ORIG="$(realpath --canonicalize-existing "$1")"
   local +x DEST="$2"
+  local +x REAL_DEST="$(realpath --canonicalize-existing "$DEST")"
 
   if [[ -z "$ORIG" || -z "$DEST" ]]; then
     exit 2
@@ -19,7 +20,7 @@ link () {
   fi
 
   # === Check if it already exists:
-  if [[ "$ORIG" == "$(realpath --canonicalize-missing "$DEST")" ]]; then
+  if [[ "$ORIG" == "$REAL_DEST" ||  "$ORIG" == "$(realpath --canonicalize-missing "$DEST")" ]]; then
     echo "=== Already linked:" >&2
     echo "$ORIG -> $DEST" >&2
     return 0
