@@ -29,7 +29,11 @@ choose () {
 
       local +x FS="$(
         set +o pipefail
-        git ls-files --others --modified  --cached | fzy
+        if [[ -d .git ]]; then
+          git ls-files --others --modified  --cached | sort --human-numeric-sort | uniq | fzy
+        else
+          ls -1 -A | sort --human-numeric-sort | uniq | fzy
+        fi
       )"
 
       if [[ -z "$FS" ]]; then
@@ -68,13 +72,7 @@ choose () {
       ;;
 
     file)
-      local +x LIST="$(cache list)"
-      if [[ -z "$LIST" ]]; then
-        echo "> [Nothing found.]" >&2
-        local +x FS="./"
-      else
-        local +x FILE="$(cache list | tac | (fzy || :))"
-      fi
+      local +x FILE="$(ls -1 -A | tac | (fzy || :))"
 
       if [[ -z "$FILE" ]]; then
         return 0
