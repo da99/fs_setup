@@ -34,7 +34,7 @@ usb-boot () {
   echo "  MOUNT POINT:  $MOUNT_POINT"
   echo "  SIZE:  $SIZE"
   echo "  NAME:  $NAME"
-  echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f9 | tr '\n' ' ')"
+  echo "  Label: $(ls -l /dev/disk/by-label | grep "$NAME" | cut -d' ' -f10- | tr '\n' ' ')"
 
   if [[ ! -z "$MOUNT_POINT" ]]; then
     local +x IFS=$'\n'
