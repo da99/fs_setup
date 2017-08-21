@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}} FILE1  FILE2
+#
+set -u -e -o pipefail
+
+local +x FILE1="$1"; shift
+local +x FILE2="$1"; shift
+
+if ! sh_fs is-same-content "$FILE1" "$FILE2" ; then
+  echo "=== cat $FILE1 > $FILE2" >&2
+  cat "$FILE1" > "$FILE2"
+fi
+
