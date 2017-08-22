@@ -9,6 +9,10 @@ local +x FILE2="$1"; shift
 
 if ! sh_fs is-same-content "$FILE1" "$FILE2" ; then
   echo "=== cat $FILE1 > $FILE2" >&2
-  cat "$FILE1" > "$FILE2"
+  if sh_fs is-owned-by-root "$FILE2" ; then
+    sudo cp -i -f "$FILE1" "$FILE2"
+  else
+    cp -f "$FILE1" "$FILE2"
+  fi
 fi
 
