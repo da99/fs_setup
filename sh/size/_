@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}  file [path2] [path3] ...
+#
+set -u -e -o pipefail
+
+while [[ ! -z "$@" ]]; do
+  du -sh "$1"
+  shift
+done | sort -k1,1 --human-numeric-sort
+
