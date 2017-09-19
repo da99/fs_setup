@@ -13,6 +13,7 @@ fi
 
 set -u -e -o pipefail
 
+PATH="$PATH:$THIS_DIR/bin"
 EDITOR=${EDITOR:-nvim}
 CACHE="$THIS_DIR/progs/cache"
 FILE_HISTORY="$CACHE"/files.txt
