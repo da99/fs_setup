@@ -1,5 +1,5 @@
 #
-# === {{CMD}} dirs [args to append to find]
+# === {{CMD}} empty dirs
 #
 
 list () {
@@ -8,7 +8,7 @@ list () {
       shift; shift
       IFS=$'\n'
       for dir in $(my_fs ls-dirs) ; do
-        find $dir -type d -empty $@
+        find $dir -type d -empty
       done
       ;;
     *)
