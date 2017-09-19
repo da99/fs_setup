@@ -2,16 +2,18 @@
 # === {{CMD}} dirs [args to append to find]
 #
 
-empty () {
-  local +x ACTION=$1; shift
-  case "$ACTION" in
-    dirs)
+list () {
+  case "$(echo $@)" in
+    "empty dirs")
+      shift; shift
       IFS=$'\n'
       for dir in $(my_fs ls-dirs) ; do
         find $dir -type d -empty $@
       done
       ;;
     *)
+      echo "!!! Unknown arguments: list $@" >&2
+      exit 5
       ;;
   esac
-} # empty ()
+} # list ()
