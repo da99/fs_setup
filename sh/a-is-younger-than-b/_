@@ -1,0 +1,16 @@
+#
+# === {{CMD}} file-a file-b
+# === Uses the modified time to compare age.
+#
+
+local +x A="$1"
+local +x B="$2"
+
+if [[ ! -f "$A" || ! -f "$B" ]]; then
+  return 2
+fi
+
+local +x A_MOD="$(stat --format="%Y" "$A")"
+local +x B_MOD="$(stat --format="%Y" "$B")"
+
+[[ "$A_MOD" -gt "$B_MOD" ]]
