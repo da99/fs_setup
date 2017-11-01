@@ -1,0 +1,13 @@
+
+# === {{CMD}}
+# === {{CMD}}  /path/to/folder
+# === From: http://unix.stackexchange.com/questions/6008/get-the-free-space-available-in-current-directory-in-bash
+free-space () {
+  if [[ -z "$@" ]]; then
+    TARGET="$PWD"
+  else
+    TARGET="$1"; shift
+  fi
+
+  df -Ph "$TARGET" | tail -1 | awk '{print $4}'
+} # === end function
