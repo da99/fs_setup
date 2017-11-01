@@ -1,8 +1,10 @@
 #!/usr/bin/env zsh
 #
 #
-THE_ARGS="$@"
-THIS_DIR="$(dirname "$(dirname "$0")")"
+set -u -e -o pipefail
+local +x THE_ARGS="$@"
+local +x THIS_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+PATH="$PATH:$THIS_DIR/bin"
 
 if [[ -z "$@" ]]; then
   action="watch"
@@ -15,43 +17,29 @@ set -u -e -o pipefail
 
 PATH="$PATH:$THIS_DIR/bin"
 EDITOR=${EDITOR:-nvim}
-CACHE="$THIS_DIR/progs/cache"
+CACHE="$THIS_DIR/tmp/cache"
 FILE_HISTORY="$CACHE"/files.txt
 
 case $action in
   help|--help|-h)
-    PATH="$PATH:$THIS_DIR/../mksh_setup/bin"
-    mksh_setup print-help $0 "$@"
+    PATH="$PATH:$THIS_DIR/../my_zsh/bin"
+    my_zsh print-help $0 "$@"
     ;;
 
   *)
-
     mkdir -p "$CACHE"
     touch "$FILE_HISTORY"
 
-    FUNC_FILE="$THIS_DIR/bin/public/${action}/_.sh"
-
-    if [[ -s  "$FUNC_FILE"  ]]; then
-
-      export THIS_FILE="$FUNC_FILE"
-      export THIS_FUNC="$action"
-      export THIS_FUNC_DIR="$THIS_DIR/bin/public/${action}"
-
-      source "$THIS_FILE"
-      "$THIS_FUNC" "$@"
-      return 0
-    fi
-
-    SH_FILE="$THIS_DIR/sh/${action}/_"
-    if [[ -s "$SH_FILE" ]]; then
-      source "$SH_FILE"
+    local +x SHELL_SCRIPT="$THIS_DIR/sh/${ACTION}"/_
+    if [[ -s  "$SHELL_SCRIPT"  ]]; then
+      source "$SHELL_SCRIPT"
       exit 0
     fi
 
-    # === Check progs/bin:
-    if [[ -f "progs/bin/$action" ]]; then
-      export PATH="$PWD/progs/bin:$PATH"
-      progs/bin/$action "$@"
+    # === Check tmp/bin:
+    if [[ -f "$THIS_DIR/tmp/bin/$action" ]]; then
+      export PATH="$THIS_DIR/tmp/bin:$PATH"
+      "$THIS_DIR"/tmp/bin/$action "$@"
       exit 0
     fi
 

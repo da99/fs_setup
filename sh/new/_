@@ -1,6 +1,7 @@
+#!/usr/bin/env zsh
+#
+#
 
-source "$THIS_DIR/bin/public/history/_.sh"
-source "$THIS_DIR/bin/public/edit/_.sh"
 # === {{CMD}}  new       new/dir/file.txt
 # === {{CMD}}  new       new/dir/
 new () {
@@ -9,14 +10,14 @@ new () {
   case "$FS" in
     */)
       mkdir -p "$FS"
-      history insert "$FS"
+      my_fs history insert "$FS"
       ;;
 
     *)
       local +x DIR="$(dirname "$FS")"
       mkdir -p "$DIR"
       touch "$FS"
-      edit "$FS"
+      my_fs edit "$FS"
       ;;
   esac
 } # === end function

@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+#
+#
 
 # === {{CMD}}  list of files ...
 # === Interactive programs: asks you what to rename each file to.

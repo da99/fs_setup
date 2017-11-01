@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}} path
+# === Exist: 0 - owned by root. 1 - not owned by root. 5 - does not exist.
+#
+set -u -e -o pipefail
+
+local +x TARGET="$1"; shift
+
+if [[ ! -e "$TARGET" ]]; then
+  exit 5
+fi
+
+[[ "$(stat -c "%u" "$TARGET")" -eq 0 ]]
+

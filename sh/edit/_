@@ -1,5 +1,7 @@
+#!/usr/bin/env zsh
+#
+#
 
-source "$THIS_DIR/bin/public/cache/_.sh"
 
 # === {{CMD}}  file|dir
 edit () {
@@ -14,8 +16,8 @@ edit () {
     FIN="$FS/"
   fi
 
-  cache insert "$FIN"
+  my_fs cache insert "$FIN"
   $EDITOR "$FS"
-  cache insert "$FIN"
+  my_fs cache insert "$FIN"
 
 } # === end function

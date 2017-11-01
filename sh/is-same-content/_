@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}  file1  file2
+#
+set -u -e -o pipefail
+
+local +x FILE1="$1"; shift
+local +x FILE2="$1"; shift
+
+if [[ -f "$FILE1" && -f "$FILE2" ]]; then
+  diff "$FILE1" "$FILE2" && return 0
+fi
+
+exit 5

@@ -1,5 +1,6 @@
+#!/usr/bin/env zsh
+#
 
-source "$THIS_DIR/bin/public/cache/_.sh"
 
 # === {{CMD}}  last  # === Choose from last line in cache.
 # === {{CMD}}  file  # === Fuzzy search the cache.
@@ -12,7 +13,7 @@ choose () {
   case "$CMD" in
     function)
       set +o pipefail
-      local +x FS="$(find -L bin/private bin/public -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzy)"
+      local +x FS="$(find -L bin/private sh/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzy)"
       if [[ ! -z "$FS" ]]; then
         if [[ -d "$FS" && -e "$FS/_.sh" ]]; then
           FS="$FS/_.sh"
@@ -62,7 +63,7 @@ choose () {
       ;;
 
     last)
-      local +x FS="$(cache last)"
+      local +x FS="$(my_fs cache last)"
       if [[ -z "$FS" ]]; then
         echo "=== No file/dir found." >&2
         exit 2

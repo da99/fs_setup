@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+#
+#
 
 # === {{CMD}}  FILENAME
 # === Returns 0 if file does not exist.

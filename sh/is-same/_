@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}  file1  file2
+#
+set -u -e -o pipefail
+
+local +x FILE1="$(realpath "$1")"; shift
+local +x FILE2="$(realpath "$1")"; shift
+
+if [[ ! -e "$FILE1" || ! -e "$FILE2" ]]; then
+  exit 5
+fi
+
+diff "$FILE1" "$FILE2" &>/dev/null
+

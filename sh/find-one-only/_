@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+#
+# === {{CMD}}  args for find cmd
+# === Exits 4 if line count of results == 0
+# === Exits 5 if line count of results >  1
+#
+set -u -e -o pipefail
+
+if [[ -z "$(echo $@)" ]]; then
+  echo "!!! No args specified for: find-one-file-only" >&2
+  exit 2
+fi
+
+local +x RESULTS="$(find "$@")"
+
+if [[ -z "$(echo $RESULTS)" ]]; then
+  exit 4
+fi
+
+if [[ -e "$RESULTS" ]]; then
+  echo "$RESULTS"
+  return 0
+fi
+
+exit 5

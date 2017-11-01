@@ -1,8 +1,8 @@
+#!/usr/bin/env zsh
+#
+#
 
 
-source "$THIS_DIR/bin/public/cache/_.sh"
-source "$THIS_DIR/bin/public/edit/_.sh"
-source "$THIS_DIR/bin/public/choose/_.sh"
 
 # === {{CMD}}  some/dir/
 # === {{CMD}}  some/dir/file.txt
@@ -13,7 +13,7 @@ open () {
 
     "--choose "*)
       shift
-      local +x FS="$(choose $@ || :)"
+      local +x FS="$(my_fs choose $@ || :)"
       if [[ -z "$FS" ]]; then
         return 0
       fi
@@ -28,7 +28,7 @@ open () {
         exit 2
       fi
 
-      edit "$DIR"/
+      my_fs edit "$DIR"/
       ;;
 
 
