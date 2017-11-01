@@ -1,5 +1,6 @@
-
-source "$THIS_DIR"/bin/public/modified-age/_.sh
+#!/usr/bin/env zsh
+#
+#
 
 # === {{CMD}}  SECS  path/to/file
 # === Exits with 1 if file is older.

@@ -1,3 +1,6 @@
+#!/usr/bin/env zsh
+#
+#
 
 # === {{CMD}}  source(old)  dest(new)
 # === `ln -s` does not resolve source destinations.

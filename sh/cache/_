@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+#
 
 # === {{CMD}}  compact
 # === {{CMD}}  --force compact
@@ -7,59 +9,57 @@
 # === {{CMD}}  list-files
 # === {{CMD}}  list-dirs
 # === {{CMD}}  edit
-cache () {
-  local +x COMMAND="$1"; shift
-  local +x MAX="100"
+local +x COMMAND="$1"; shift
+local +x MAX="100"
 
-  case "$COMMAND" in
+case "$COMMAND" in
 
-    edit)
-      $EDITOR "${FILE_HISTORY}"
-      ;;
+  edit)
+    $EDITOR "${FILE_HISTORY}"
+    ;;
 
-    last)
-      cache list | tail -n1
-      ;;
+  last)
+    cache list | tail -n1
+    ;;
 
-    list)
-      awk '!seen[$0]++' "$FILE_HISTORY"
-      ;;
+  list)
+    awk '!seen[$0]++' "$FILE_HISTORY"
+    ;;
 
-    list-files)
-      awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "[^/]$"
-      ;;
+  list-files)
+    awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "[^/]$"
+    ;;
 
-    list-dirs)
-      awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "/$"
-      ;;
+  list-dirs)
+    awk '!seen[$0]++' "$FILE_HISTORY" | grep -E "/$"
+    ;;
 
-    insert)
-      cache compact
-      echo "$1" >> "$FILE_HISTORY"
-      ;;
+  insert)
+    cache compact
+    echo "$1" >> "$FILE_HISTORY"
+    ;;
 
-    compact)
-      if [[ $(cat "$FILE_HISTORY" | wc -l) -gt $MAX ]]; then
-        cache --force compact
-      fi
-      ;;
+  compact)
+    if [[ $(cat "$FILE_HISTORY" | wc -l) -gt $MAX ]]; then
+      cache --force compact
+    fi
+    ;;
 
-    --force)
-      case "$1" in
-        compact)
-          echo "$(awk '!seen[$0]++' "$FILE_HISTORY")" > "$FILE_HISTORY"
-          ;;
-        *)
-          echo "!!! Invalid command: --force $@" >&2
-          exit 1
-          ;;
-      esac
-      ;;
+  --force)
+    case "$1" in
+      compact)
+        echo "$(awk '!seen[$0]++' "$FILE_HISTORY")" > "$FILE_HISTORY"
+        ;;
+      *)
+        echo "!!! Invalid command: --force $@" >&2
+        exit 1
+        ;;
+    esac
+    ;;
 
-    *)
-      echo "!!! Invalid command: $COMMAND $@" >&2
-      exit 1
-      ;;
+  *)
+    echo "!!! Invalid command: $COMMAND $@" >&2
+    exit 1
+    ;;
 
-  esac # === case "$COMMAND"
-} # === end function
+esac # === case "$COMMAND"

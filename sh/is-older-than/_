@@ -1,5 +1,7 @@
+#!/usr/bin/env zsh
+#
+#
 
-source "$THIS_DIR"/bin/public/modified-age/_.sh
 
 # === {{CMD}}  SECONDS  filename
 # === Exits with 1 if file is young or does not exist.

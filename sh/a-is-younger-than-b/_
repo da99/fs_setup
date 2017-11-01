@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+#
 #
 # === {{CMD}} file-a file-b
 # === Uses the modified time to compare age.
