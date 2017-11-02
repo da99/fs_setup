@@ -7,7 +7,7 @@
 # === {{CMD}}  list-files
 # === {{CMD}}  list-dirs
 # === {{CMD}}  edit
-cache () {
+
   local +x COMMAND="$1"; shift
   local +x MAX="100"
 
@@ -62,4 +62,4 @@ cache () {
       ;;
 
   esac # === case "$COMMAND"
-} # === end function
+

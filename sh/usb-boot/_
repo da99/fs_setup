@@ -6,7 +6,7 @@
 # === Finds device, formats it, and writes file to it.
 
 # From: https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux
-usb-boot () {
+
   # sudo fdisk -l
   local +x ISO="$1"; shift
   if [[ ! -e "$ISO" ]]; then
@@ -86,4 +86,4 @@ usb-boot () {
       exit 1
       ;;
   esac
-} # === end function
+

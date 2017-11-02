@@ -4,7 +4,7 @@
 
 # === {{CMD}}  new       new/dir/file.txt
 # === {{CMD}}  new       new/dir/
-new () {
+
   local +x FS="$1"; shift
 
   case "$FS" in
@@ -20,4 +20,4 @@ new () {
       my_fs edit "$FS"
       ;;
   esac
-} # === end function
+

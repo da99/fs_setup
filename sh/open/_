@@ -8,7 +8,7 @@
 # === {{CMD}}  some/dir/file.txt
 # === {{CMD}}  --choose [last|file|dir|..]
 
-open () {
+
   case "$@" in
 
     "--choose "*)
@@ -45,4 +45,4 @@ open () {
 
   esac # === $COMMAND $@
 
-} # === end function
+

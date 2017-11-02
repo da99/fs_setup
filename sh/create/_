@@ -6,7 +6,7 @@
 # === {{CMD}}  some/dir/
 # === {{CMD}}  some/dir/file.txt
 # === {{CMD}}  --choose [last|file|dir|...]
-create () {
+
   local +x CMD="$1"; shift
 
   case "$CMD" in
@@ -52,4 +52,4 @@ create () {
 
   esac # === $COMMAND $@
 
-} # === end function
+

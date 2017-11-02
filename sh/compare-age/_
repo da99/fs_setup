@@ -2,7 +2,7 @@
 #
 
 # === {{CMD}}  FILE1 ">|<|=="  "FILE2"
-compare-age () {
+
   local +x FILE1="$1"; shift
   local +x COMPARE="$1"; shift
   local +x FILE2="$1"; shift
@@ -25,4 +25,4 @@ compare-age () {
       ;;
   esac
 
-} # === end function
+

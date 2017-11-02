@@ -4,7 +4,7 @@
 
 
 # === {{CMD}}  file|dir
-edit () {
+
   local +x FS="$1"; shift
   if [[ ! -e "$FS" ]]; then
     echo "!!! Does not exist: $FS" >&2
@@ -20,4 +20,4 @@ edit () {
   $EDITOR "$FS"
   my_fs cache insert "$FIN"
 
-} # === end function
+

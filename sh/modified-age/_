@@ -4,7 +4,7 @@
 
 # === {{CMD}}  FILENAME
 # === Returns 0 if file does not exist.
-modified-age () {
+
 
   local +x FILENAME="$1"; shift
 
@@ -16,4 +16,4 @@ modified-age () {
   local +x NOW="$(date +"%s")"
   local +x THEN="$(stat -c %Y "$FILENAME")"
   echo $(( NOW - THEN ))
-} # === end function
+

@@ -4,7 +4,7 @@
 
 # === {{CMD}}  list of files ...
 # === Interactive programs: asks you what to rename each file to.
-rename-files () {
+
   while [[ ! -z "$@" ]]; do
     local +x FILE="$1"; shift
     local +x REAL_FILE="$(realpath "$FILE")"
@@ -24,4 +24,4 @@ rename-files () {
         ;;
     esac
   done
-} # === end function
+

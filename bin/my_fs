@@ -6,21 +6,14 @@ local +x THE_ARGS="$@"
 local +x THIS_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
 PATH="$PATH:$THIS_DIR/bin"
 
-if [[ -z "$@" ]]; then
-  action="watch"
-else
-  action=$1
-  shift
-fi
-
-set -u -e -o pipefail
+local +x ACTION="$1"; shift
 
 PATH="$PATH:$THIS_DIR/bin"
 EDITOR=${EDITOR:-nvim}
 CACHE="$THIS_DIR/tmp/cache"
 FILE_HISTORY="$CACHE"/files.txt
 
-case $action in
+case $ACTION in
   help|--help|-h)
     PATH="$PATH:$THIS_DIR/../my_zsh/bin"
     my_zsh print-help $0 "$@"
@@ -37,14 +30,14 @@ case $action in
     fi
 
     # === Check tmp/bin:
-    if [[ -f "$THIS_DIR/tmp/bin/$action" ]]; then
+    if [[ -f "$THIS_DIR/tmp/bin/$ACTION" ]]; then
       export PATH="$THIS_DIR/tmp/bin:$PATH"
-      "$THIS_DIR"/tmp/bin/$action "$@"
+      "$THIS_DIR"/tmp/bin/$ACTION "$@"
       exit 0
     fi
 
     # === It's an error:
-    echo "!!! Unknown action: $action" 1>&2
+    echo "!!! Unknown action: $ACTION $@" 1>&2
     exit 1
     ;;
 
