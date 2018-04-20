@@ -8,7 +8,6 @@ PATH="$PATH:$THIS_DIR/bin"
 
 local +x ACTION="$1"; shift
 
-PATH="$PATH:$THIS_DIR/bin"
 EDITOR=${EDITOR:-nvim}
 CACHE="$THIS_DIR/tmp/cache"
 FILE_HISTORY="$CACHE"/files.txt
