@@ -1,11 +1,24 @@
 #!/usr/bin/env zsh
 #
-# === {{CMD}}  file [path2] [path3] ...
+# === {{CMD}}       file [path2] [path3] ...
+# === {{CMD}} free  file [path2] [path3] ...
 #
 set -u -e -o pipefail
 
+
+if [[ ! -z "$@" && "$1" == "free" ]]; then
+  local +x is_free="free"
+  shift
+else
+  local +x is_free=""
+fi
+
 while [[ ! -z "$@" ]]; do
-  du -sh "$1" || :
+  if [[ "$is_free" == "free" ]]; then
+    df -h "$1" | tail -n 1 | tr -s ' ' | cut -d' ' -f4
+  else
+    du -sh "$1" || :
+  fi
   shift
 done | sort -k1,1 --human-numeric-sort
 
