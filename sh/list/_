@@ -3,6 +3,7 @@
 #
 #
 # === {{CMD}} empty dirs
+# === {{CMD}} files      # List files, ignoring node_modules, .gitignore-d files, etc.
 #
 
 case "$(echo $@)" in
@@ -12,6 +13,39 @@ case "$(echo $@)" in
     for dir in $(my_fs ls-dirs) ; do
       find $dir -type d -empty
     done
+    ;;
+
+  "dirs")
+    find -L ./ -maxdepth 1 -mindepth 1 -type d \
+      -not -name ".git"                    \
+      -and -not -name "node_modules"             \
+      -and -not -name "shards"             \
+      -and -not -name "js_packages"             \
+      -and -not -name ".crystal"             \
+      -and -not -name "progs"             \
+      -and -not -name "tmp"             \
+      -and -not -name '.Trash-*'        \
+      -and -not -name "lost+found"         \
+      -print
+    ;;
+
+  "files")
+    {
+      if [[ -d .git ]]; then
+        git ls-files --others --modified  --cached \
+          -x 'tmp/*'          \
+          -x 'node_modules/*' \
+          -x '.shards/*'      \
+          -x '.js_packages'   \
+          -x '.crystal'       \
+          -x 'progs/*'        \
+          -x '.Trash/*'       \
+          -x '.Trash-*/*'     \
+          -x '.lost+found/*'
+      else
+        find . -maxdepth 3 -type f
+      fi
+    } | sort --human-numeric-sort | uniq
     ;;
   *)
     echo "!!! Unknown arguments: list $@" >&2
