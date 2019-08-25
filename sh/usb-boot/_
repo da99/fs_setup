@@ -66,13 +66,15 @@
       echo '.'; sleep 1
       set "-x"
       sudo parted /dev/$NAME mklabel gpt
-      sudo parted -a opt /dev/$NAME mkpart primary ext4 0% 100%
+      sudo parted -a opt /dev/$NAME mkpart primary fat32 0% 100%
       set +x
       echo "=== Results:"
       lsblk | grep "$NAME"
 
       echo "=== Creating filesystem on partition ${NAME}1 on disk $NAME:"
-      sudo mkfs.ext4 -L usbboot /dev/${NAME}1
+      # sudo mkfs.ext4 -L USBBOOT /dev/${NAME}1
+      # NOTE: Use lower case labels to be compatible with different systems.
+      sudo mkfs.vfat -n USBBOOT /dev/${NAME}1
       echo "=== Results of creating filesystem on partition:"
       lsblk --fs | grep "$NAME"
 
